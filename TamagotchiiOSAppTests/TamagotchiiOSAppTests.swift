@@ -8,29 +8,80 @@
 import XCTest
 @testable import TamagotchiiOSApp
 
-class TamagotchiiOSAppTests: XCTestCase {
+class TamagotchiTest: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testWhenICreateATamagotchiItsHungerIsInitialisedTo0() {
+        //arrange
+        let expectedHunger = 0
+        
+        //act
+        let tamagotchi = Tamagotchi()
+        
+        //assert
+        XCTAssertEqual(expectedHunger, tamagotchi.getHunger())
+        
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func testWhenICreateATamagotchiItsWeightIsInitialisedTo1() {
+        //arrange
+        let expectedWeight = 1.0
+
+        //act
+        let tamagotchi = Tamagotchi()
+        
+        //assert
+        XCTAssertEqual(expectedWeight, tamagotchi.getWeight())
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
+    func testWhenICreateATamagotchiItsAgeIsInitialisedTo0() {
+        //arrange
+        let expectedAge = 0
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+        //act
+        let tamagotchi = Tamagotchi()
+        
+        //assert
+        XCTAssertEqual(expectedAge, tamagotchi.getAge())
     }
+    
+    func testWhenICreateATamagotchiItsHappinessIsInitialisedTo5() {
+        //arrange
+        let expectedHappiness = 5
 
+        //act
+        let tamagotchi = Tamagotchi()
+        
+        //assert
+        XCTAssertEqual(expectedHappiness, tamagotchi.getHappiness())
+    }
+    
+    func testWhenICreateATamagotchiIsDeadIsInitialisedToFalse() {
+        //arrange
+        let expectedIsDead = false
+        //act
+        let tamagotchi = Tamagotchi()
+        
+        //assert
+        XCTAssertEqual(expectedIsDead, tamagotchi.getIsDead())
+    }
+    
+    func testWhenICreateATamagotchiIsSickIsInitialisedToFalse() {
+        //arrange
+        let expectedIsSick = false
+        //act
+        let tamagotchi = Tamagotchi()
+        
+        //assert
+        XCTAssertEqual(expectedIsSick, tamagotchi.getIsSick())
+    }
+    
+    func testWhenICreateATamagotchINeedsToExcreteIsInitialisedToFalse() {
+        //arrange
+        let expectedNeedsToExcrete = false
+        //act
+        let tamagotchi = Tamagotchi()
+        
+        //assert
+        XCTAssertEqual(expectedNeedsToExcrete, tamagotchi.getNeedsToExcrete())
+    }
 }
