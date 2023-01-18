@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var tamagotchi = Tamagotchi()
+    @StateObject private var tamagotchi = Tamagotchi()
     
     var body: some View {
         VStack {
             Text("\(tamagotchi.displayStats())")
             Button("Feed \(tamagotchi.name)", action: {
-                tamagotchi.changeHunger(newHunger: 1)
+                tamagotchi.changeHunger(newHunger: -1)
             })
         }
     }
@@ -23,5 +23,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .preferredColorScheme(.dark)
     }
 }

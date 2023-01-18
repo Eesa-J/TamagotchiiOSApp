@@ -7,12 +7,12 @@
 
 import Foundation
 
-class Tamagotchi {
+class Tamagotchi: ObservableObject {
     let name: String
-    private var hunger: Int
-    private var weight: Double
-    private var age: Int
-    private var happiness: Int
+    @Published private var hunger: Int
+    @Published private var weight: Double
+    @Published private var age: Int
+    @Published private var happiness: Int
     private var isSick: Bool
     private var isDead: Bool
     private var needsToExcrete: Bool
@@ -55,14 +55,14 @@ class Tamagotchi {
         return hunger
     }
     func changeHunger(newHunger: Int) {
-        if newHunger > 10 {
+        if hunger + newHunger > 10 {
             hunger = 10
         }
-        else if newHunger < 0 {
+        else if hunger + newHunger < 0 {
             hunger = 0
         }
         else {
-            hunger = hunger + newHunger
+            hunger += newHunger
         }
     }
     
