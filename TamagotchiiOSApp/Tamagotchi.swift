@@ -70,11 +70,11 @@ class Tamagotchi: ObservableObject {
         return weight
     }
     func changeWeight(newWeight: Double) {
-        if newWeight < 0 {
+        if weight + newWeight < 0 {
             weight = 0
         }
         else {
-            weight = weight + newWeight
+            weight += newWeight
         }
     }
 
@@ -91,7 +91,7 @@ class Tamagotchi: ObservableObject {
         return happiness
     }
     func changeHappiness(newHappiness: Int) {
-        if newHappiness > 10 {
+        if happiness + newHappiness > 10 {
             happiness = 10
         }
         else if newHappiness < 0 {

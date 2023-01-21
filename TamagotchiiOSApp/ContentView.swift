@@ -11,11 +11,26 @@ struct ContentView: View {
     @StateObject private var tamagotchi = Tamagotchi()
     
     var body: some View {
-        VStack {
-            Text("\(tamagotchi.displayStats())")
-            Button("Feed \(tamagotchi.name)", action: {
-                tamagotchi.changeHunger(newHunger: -1)
-            })
+        Form {
+            VStack {
+                Text("\(tamagotchi.displayStats())")
+            }
+            Section {
+                Button("Feed \(tamagotchi.name)", action: {
+                    tamagotchi.changeHunger(newHunger: 1)
+                    tamagotchi.changeWeight(newWeight: 0.5)
+                })
+                Button("Play with \(tamagotchi.name)", action: {
+                    tamagotchi.changeHappiness(newHappiness: 2)
+                    tamagotchi.changeWeight(newWeight: -0.5)
+                    tamagotchi.changeHunger(newHunger: -1)
+                })
+                Button("Feed \(tamagotchi.name)", action: {
+                    tamagotchi.changeHunger(newHunger: 1)
+                    tamagotchi.changeWeight(newWeight: 0.5)
+                })
+                
+            }
         }
     }
 }
@@ -23,6 +38,5 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .preferredColorScheme(.dark)
     }
 }
