@@ -16,6 +16,7 @@ class Tamagotchi: ObservableObject {
     @Published private var isSick: Bool
     @Published private var isDead: Bool
     @Published private var needsCleaning: Bool
+    @Published private var causeOfDeath: String
     
     init() {
         self.name = "Leo"
@@ -26,18 +27,16 @@ class Tamagotchi: ObservableObject {
         self.isSick = false
         self.isDead = false
         self.needsCleaning = false
+        self.causeOfDeath = ""
         
     }
     
     func displayStats() -> String {
         let statsDisplay = """
-                            Name: \(name)
                             Age: \(age)
                             Happiness: \(happiness)
                             Weight: \(weight)
                             Hunger: \(hunger)
-                            Needs cleaning: \(needsCleaning)
-                            Needs medicine: \(isSick)
                             """
         return statsDisplay
     }
@@ -66,6 +65,8 @@ class Tamagotchi: ObservableObject {
         }
         else if hunger + newHunger > 10 {
             hunger = 10
+            causeOfDeath = "starvation"
+            changeIsDead()
         }
         else {
             hunger += newHunger
@@ -78,6 +79,12 @@ class Tamagotchi: ObservableObject {
     func changeWeight(newWeight: Double) {
         if weight + newWeight < 0 {
             weight = 0
+            changeIsDead()
+        }
+        else if weight + newWeight > 10 {
+            weight += newWeight
+            causeOfDeath = "obesity"
+            changeIsDead()
         }
         else {
             weight += newWeight
@@ -112,13 +119,8 @@ class Tamagotchi: ObservableObject {
     func getIsSick() -> Bool {
         return isSick
     }
-    func changeIsSick() {
-        if isSick == false {
-            isSick = true
-        }
-        else {
-            isSick = false
-        }
+    func changeIsSick(value: Bool) {
+        isSick = value
     }
     
     func getIsDead() -> Bool {
@@ -133,16 +135,18 @@ class Tamagotchi: ObservableObject {
         }
     }
     
-    func getNeedsToExcrete() -> Bool {
+    func getNeedsCleaning() -> Bool {
         return needsCleaning
     }
-    func changeNeedsToExcrete() {
-        if needsCleaning == false {
-            needsCleaning = true
-        }
-        else {
-            needsCleaning = false
-        }
+    func changeNeedsCleaning(value: Bool) {
+        needsCleaning = value
+    }
+    
+    func getCauseOfDeath() -> String {
+        return causeOfDeath
+    }
+    func changeCauseOfDeath(cause: String) {
+        causeOfDeath = cause
     }
 }
 

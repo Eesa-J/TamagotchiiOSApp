@@ -9,11 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var tamagotchi = Tamagotchi()
+    let oldAge = Int.random(in: 5...10)
     
-    @State private var ageRemainingTime = 60
-    @State private var mealCooldownTime = 10
-    @State private var snackCooldownTime = 10
-    @State private var playCooldownTime = 10
+    @State private var ageRemainingTime = 15
+    @State private var mealCooldownTime = 5
+    @State private var snackCooldownTime = 5
+    @State private var playCooldownTime = 5
+    @State private var cleanCountdownTime = Int.random(in: 3...5)
+    @State private var cureCountdownTime = Int.random(in: 3...7)
     
     @State private var mealBinding = false
     @State private var snackBinding = false
@@ -25,18 +28,38 @@ struct ContentView: View {
     
     var body: some View {
         Form {
-            if tamagotchi.getIsDead() == false {
-                VStack {
+            
+            if tamagotchi.getIsDead() == true {
+                HStack() {
                     Spacer()
-                    Text("\(tamagotchi.displayStats())").font(.title)
-                    Text("\(tamagotchi.getName()) has died at the age of \(tamagotchi.getAge())").font(.title)
+                    VStack(alignment: .center , spacing: 20) {
+                        Text("\(tamagotchi.getName()) has died!").font(.largeTitle)
+                        Text("Cause of death: \(tamagotchi.getCauseOfDeath())").font(.title3)
+                        Text("\(tamagotchi.displayStats())").font(.title3)
+                    }
                     Spacer()
                 }
+                
             } else {
                 Section {
                     Text("\(tamagotchi.getName())").font(.title)
                     Text("\(tamagotchi.displayStats())")
                 }
+                
+                Section {
+                    if tamagotchi.getIsSick() == true {
+                        Text("\(tamagotchi.getName()) is sick!").foregroundColor(.red)
+                    } else {
+                        Text("\(tamagotchi.getName()) is not ill!").foregroundColor(.green)
+                    }
+                    
+                    if tamagotchi.getNeedsCleaning() == true {
+                        Text("\(tamagotchi.getName()) went to the toilet!").foregroundColor(.red)
+                    } else {
+                        Text("\(tamagotchi.getName()) is clean!").foregroundColor(.green)
+                    }
+                }
+                
                 Section {
                     
                     HStack(alignment: .center) {
@@ -52,11 +75,11 @@ struct ContentView: View {
                               }
                               if self.mealCooldownTime == -1 {
                                   self.mealBinding = false
-                                  self.mealCooldownTime = 10
+                                  self.mealCooldownTime = 5
                               }
                           }
                         if self.mealBinding == true {
-                                Text("Cooldown: \(mealCooldownTime)").foregroundColor(.red)
+                                Text("Cooldown: \(mealCooldownTime)").foregroundColor(.orange)
                         }
                     }
                     
@@ -73,19 +96,19 @@ struct ContentView: View {
                               }
                               if self.snackCooldownTime == -1 {
                                   self.snackBinding = false
-                                  self.snackCooldownTime = 10
+                                  self.snackCooldownTime = 5
                               }
                           }
                         if self.snackBinding == true{
-                                Text("Cooldown: \(snackCooldownTime)").foregroundColor(.red)
+                                Text("Cooldown: \(snackCooldownTime)").foregroundColor(.orange)
                         }
                     }
                     
                     HStack(alignment: .center) {
                         Button("Play with \(tamagotchi.getName())", action: {
                             tamagotchi.changeHappiness(newHappiness: 2)
-                            tamagotchi.changeWeight(newWeight: -1)
-                            tamagotchi.changeHunger(newHunger: 3)
+                            tamagotchi.changeWeight(newWeight: -2)
+                            tamagotchi.changeHunger(newHunger: 4)
                             self.playBinding = true
                         }).tint(.black)
                           .disabled(playBinding)
@@ -95,24 +118,58 @@ struct ContentView: View {
                               }
                               if self.playCooldownTime == -1 {
                                   self.playBinding = false
-                                  self.playCooldownTime = 10
+                                  self.playCooldownTime = 5
                               }
                           }
                         if self.playBinding == true{
-                                Text("Cooldown: \(playCooldownTime)").foregroundColor(.red)
+                                Text("Cooldown: \(playCooldownTime)").foregroundColor(.orange)
                         }
                     }
                     
                     Button("Clean \(tamagotchi.getName())", action: {
-                        tamagotchi.changeNeedsToExcrete()
+                        cleanCountdownTime = Int.random(in: 3...5)
+                        tamagotchi.changeNeedsCleaning(value: false)
+                        cleanBinding = true
                     }).tint(.black)
                       .disabled(cleanBinding)
+                      .onReceive(timer) { _ in
+                          let hasExcreted = Int.random(in: 1...10)
+                          if hasExcreted == 1 {
+                              cleanBinding = false
+                              tamagotchi.changeNeedsCleaning(value: true)
+                          }
+                          if self.cleanCountdownTime > -1 && cleanBinding == false {
+                              self.cleanCountdownTime -= 1
+                          }
+                          if self.cleanCountdownTime == -1 {
+                              cleanCountdownTime = Int.random(in: 3...5)
+                              cureBinding = false
+                              tamagotchi.changeIsSick(value: true)
+                          }
+                      }
                     
                     Button("Cure \(tamagotchi.getName())", action: {
-                        tamagotchi.changeIsSick()
+                        cureCountdownTime = Int.random(in: 3...7)
+                        tamagotchi.changeIsSick(value: false)
+                        cureBinding = true
                     }).tint(.black)
                       .disabled(cureBinding)
-                    
+                      .onReceive(timer) { _ in
+                          let becomeIll = Int.random(in: 1...15)
+                          if becomeIll == 1 {
+                              cureBinding = false
+                              tamagotchi.changeIsSick(value: true)
+                          }
+                          if self.cureCountdownTime > -1 && cureBinding == false {
+                              self.cureCountdownTime -= 1
+                          }
+                          if self.cureCountdownTime == -1 {
+                              cureCountdownTime = 999999999999
+                              cureBinding = true
+                              tamagotchi.changeCauseOfDeath(cause: "disease")
+                              tamagotchi.changeIsDead()
+                          }
+                      }
                 }
                 
                 Section {
@@ -123,12 +180,16 @@ struct ContentView: View {
                             }
                             if self.ageRemainingTime == -1 {
                                 tamagotchi.changeAge(newAge: 1)
-                                self.ageRemainingTime = 60
+                                self.ageRemainingTime = 15
+                                if tamagotchi.getAge() == oldAge {
+                                    tamagotchi.changeCauseOfDeath(cause: "old age")
+                                    tamagotchi.changeIsDead()
+                                }
                             }
                         }
                         .foregroundStyle(
                             .linearGradient(
-                                colors: [.pink, .purple, .black],
+                                colors: [.pink, .teal],
                                 startPoint: .top,
                                 endPoint: .bottom
                             )
