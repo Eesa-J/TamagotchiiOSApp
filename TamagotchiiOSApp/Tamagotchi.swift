@@ -8,24 +8,24 @@
 import Foundation
 
 class Tamagotchi: ObservableObject {
-    let name: String
+    private let name: String
     @Published private var hunger: Int
     @Published private var weight: Double
     @Published private var age: Int
     @Published private var happiness: Int
-    private var isSick: Bool
-    private var isDead: Bool
-    private var needsToExcrete: Bool
+    @Published private var isSick: Bool
+    @Published private var isDead: Bool
+    @Published private var needsCleaning: Bool
     
     init() {
         self.name = "Leo"
-        self.hunger = 0
-        self.weight = 1.0
+        self.hunger = 5
+        self.weight = 5.0
         self.age = 0
         self.happiness = 5
         self.isSick = false
         self.isDead = false
-        self.needsToExcrete = false
+        self.needsCleaning = false
         
     }
     
@@ -36,8 +36,14 @@ class Tamagotchi: ObservableObject {
                             Happiness: \(happiness)
                             Weight: \(weight)
                             Hunger: \(hunger)
+                            Needs cleaning: \(needsCleaning)
+                            Needs medicine: \(isSick)
                             """
         return statsDisplay
+    }
+    
+    func getName() -> String {
+        return name
     }
     
     func eatSnack() {
@@ -55,11 +61,11 @@ class Tamagotchi: ObservableObject {
         return hunger
     }
     func changeHunger(newHunger: Int) {
-        if hunger + newHunger > 10 {
-            hunger = 10
-        }
-        else if hunger + newHunger < 0 {
+        if hunger + newHunger < 0 {
             hunger = 0
+        }
+        else if hunger + newHunger > 10 {
+            hunger = 10
         }
         else {
             hunger += newHunger
@@ -81,9 +87,10 @@ class Tamagotchi: ObservableObject {
     func getAge() -> Int {
         return age
     }
+    
     func changeAge(newAge: Int) {
-        if newAge > age && isDead == false {
-            age = age + newAge
+        if isDead == false {
+            age += newAge
         }
     }
     
@@ -127,14 +134,14 @@ class Tamagotchi: ObservableObject {
     }
     
     func getNeedsToExcrete() -> Bool {
-        return needsToExcrete
+        return needsCleaning
     }
     func changeNeedsToExcrete() {
-        if needsToExcrete == false {
-            needsToExcrete = true
+        if needsCleaning == false {
+            needsCleaning = true
         }
         else {
-            needsToExcrete = false
+            needsCleaning = false
         }
     }
 }

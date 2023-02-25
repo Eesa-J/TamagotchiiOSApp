@@ -10,9 +10,9 @@ import XCTest
 
 class TamagotchiTest: XCTestCase {
 
-    func testWhenICreateATamagotchiItsHungerIsInitialisedTo0() {
+    func testWhenICreateATamagotchiItsHungerIsInitialisedTo5() {
         //arrange
-        let expectedHunger = 0
+        let expectedHunger = 5
         
         //act
         let tamagotchi = Tamagotchi()
@@ -22,9 +22,9 @@ class TamagotchiTest: XCTestCase {
         
     }
 
-    func testWhenICreateATamagotchiItsWeightIsInitialisedTo1() {
+    func testWhenICreateATamagotchiItsWeightIsInitialisedTo5() {
         //arrange
-        let expectedWeight = 1.0
+        let expectedWeight = 5.0
 
         //act
         let tamagotchi = Tamagotchi()
